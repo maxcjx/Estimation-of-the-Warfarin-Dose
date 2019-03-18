@@ -1,5 +1,5 @@
 import argparse
-import LinUCB, baseline
+import LASSOBandit, LinUCB, baseline
 from dataset import *
 import copy
 
@@ -24,6 +24,39 @@ def main(args):
         accuracy_list.append(accuracy)
     print("-------------")
     print("LinUCB: ")
+    print("Regret: mean {}, std {}".format(np.mean(regret_list), np.std(regret_list)))
+    print("Accuracy: mean {}, std {}".format(np.mean(accuracy_list), np.std(accuracy_list)))
+
+    '''
+    Hyper parameters with good results
+    q = 1, h = 0.6
+    q = 1, h = 0,9
+    q = 1, h = 1.2 (best)
+    q = 1, h = 1.3
+    q = 1, h = 1.4 
+    q = 1, h = 1.5
+    q = 1, h = 1.6
+    q = 1, h = 1.7
+    q = 1, h = 1.8
+    q = 1, h = 1.9
+    q = 2, h = 0.9
+    q = 2, h = 1.1
+    q = 2, h = 1.8
+
+    '''
+
+    features = copy.deepcopy(features)
+    labels = copy.deepcopy(labels)
+    permutation = np.random.permutation(num_rows)
+    features = features[permutation]
+    labels = labels[permutation]
+    prediction_LASSO = LASSOBandit.LASSOBandit(features, labels, 3, dosage_reward, 1, 1.2, 0.05, 0.05)
+    regret = calc_regret(prediction_LASSO, labels, dosage_reward)
+    accuracy = calc_accuracy(prediction_LASSO, labels, dosage_bucket)
+    regret_list.append(regret)
+    accuracy_list.append(accuracy)
+    print("-------------")
+    print("LASSO: ")
     print("Regret: mean {}, std {}".format(np.mean(regret_list), np.std(regret_list)))
     print("Accuracy: mean {}, std {}".format(np.mean(accuracy_list), np.std(accuracy_list)))
 
