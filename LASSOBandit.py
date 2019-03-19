@@ -13,7 +13,7 @@ def normalize(features):
 def computeReward(x, featureList, labelList, lamda):
     featureArray = np.array(featureList) 
     labelArray = np.array(labelList)
-    clf = linear_model.Lasso(alpha = lamda, fit_intercept=False, max_iter= 100000)
+    clf = linear_model.Lasso(alpha = lamda, fit_intercept=False, max_iter= 1000000)
     clf.fit(featureArray, labelArray)
 
     #print(clf.coef_)

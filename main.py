@@ -52,19 +52,24 @@ def main(args):
 
     '''
     
+    for q in range(1, 3):
+        h = 0.1
+        while h <= 2.0:
 
-    features = copy.deepcopy(features)
-    labels = copy.deepcopy(labels)
-    permutation = np.random.permutation(num_rows)
-    features = features[permutation]
-    labels = labels[permutation]
-    prediction_LASSO = LASSOBandit.LASSOBandit(features, labels, 3, dosage_reward, 1, 1.2, 0.05, 0.05)
-    regret = calc_regret(prediction_LASSO, labels, dosage_reward)
-    accuracy = calc_accuracy(prediction_LASSO, labels, dosage_bucket)
-    print("-------------")
-    print("LASSO: ")
-    print("Regret: {}".format(regret))
-    print("Accuracy: {}".format(accuracy))
+            features = copy.deepcopy(features)
+            labels = copy.deepcopy(labels)
+            permutation = np.random.permutation(num_rows)
+            features = features[permutation]
+            labels = labels[permutation]
+            prediction_LASSO = LASSOBandit.LASSOBandit(features, labels, 3, dosage_reward, 1, 1.2, 0.05, 0.05)
+            regret = calc_regret(prediction_LASSO, labels, dosage_reward)
+            accuracy = calc_accuracy(prediction_LASSO, labels, dosage_bucket)
+            print("-------------")
+            print("LASSO: q:{} h:{}".format(q, h))
+            print("Regret: {}".format(regret))
+            print("Accuracy: {}".format(accuracy))
+
+            h += 0.1
     
     
     _, labels = load_data(args.data)
