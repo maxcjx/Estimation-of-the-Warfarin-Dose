@@ -15,24 +15,80 @@ def main(args):
     # LinUCB
     regret_list = []
     accuracy_list = []
+    medium_arm_list = []
     num_rows = features.shape[0]
+    reward_function = dosage_reward
 
-    
     for _ in range(10):
         features = copy.deepcopy(features)
         labels = copy.deepcopy(labels)
         permutation = np.random.permutation(num_rows)
         features = features[permutation]
         labels = labels[permutation]
-        prediction_LinUCB = LinUCB.LinUCB(features, labels, 3, dosage_reward, 1.4)
-        regret = calc_regret(prediction_LinUCB, labels, dosage_reward)
+        prediction_LinUCB = LinUCB.LinUCB(features, labels, 3, reward_function, 1.4)
+        regret = calc_regret(prediction_LinUCB, labels, reward_function)
         accuracy = calc_accuracy(prediction_LinUCB, labels, dosage_bucket)
+        medium_arm = calc_bucket(prediction_LinUCB, 1)
         regret_list.append(regret)
         accuracy_list.append(accuracy)
+        medium_arm_list.append(medium_arm)
     print("-------------")
     print("LinUCB: ")
     print("Regret: mean {}, std {}".format(np.mean(regret_list), np.std(regret_list)))
     print("Accuracy: mean {}, std {}".format(np.mean(accuracy_list), np.std(accuracy_list)))
+    print("Medium arm percentage: mean {}, std {}".format(np.mean(medium_arm_list), np.std(medium_arm_list)))
+
+    # LinUCB with bucket difference reward (0, -1, -2)
+    regret_list = []
+    accuracy_list = []
+    medium_arm_list = []
+    num_rows = features.shape[0]
+    reward_function = dosage_reward_difference
+
+    for _ in range(10):
+        features = copy.deepcopy(features)
+        labels = copy.deepcopy(labels)
+        permutation = np.random.permutation(num_rows)
+        features = features[permutation]
+        labels = labels[permutation]
+        prediction_LinUCB = LinUCB.LinUCB(features, labels, 3, reward_function, 1.4)
+        regret = calc_regret(prediction_LinUCB, labels, reward_function)
+        accuracy = calc_accuracy(prediction_LinUCB, labels, dosage_bucket)
+        medium_arm = calc_bucket(prediction_LinUCB, 1)
+        regret_list.append(regret)
+        accuracy_list.append(accuracy)
+        medium_arm_list.append(medium_arm)
+    print("-------------")
+    print("LinUCB with bucket difference reward (0, -1, -2): ")
+    print("Regret: mean {}, std {}".format(np.mean(regret_list), np.std(regret_list)))
+    print("Accuracy: mean {}, std {}".format(np.mean(accuracy_list), np.std(accuracy_list)))
+    print("Medium arm percentage: mean {}, std {}".format(np.mean(medium_arm_list), np.std(medium_arm_list)))
+
+    # LinUCB with real value reward
+    regret_list = []
+    accuracy_list = []
+    medium_arm_list = []
+    num_rows = features.shape[0]
+    reward_function = dosage_reward_real_value
+
+    for _ in range(10):
+        features = copy.deepcopy(features)
+        labels = copy.deepcopy(labels)
+        permutation = np.random.permutation(num_rows)
+        features = features[permutation]
+        labels = labels[permutation]
+        prediction_LinUCB = LinUCB.LinUCB(features, labels, 3, reward_function, 1.4)
+        regret = calc_regret(prediction_LinUCB, labels, reward_function)
+        accuracy = calc_accuracy(prediction_LinUCB, labels, dosage_bucket)
+        medium_arm = calc_bucket(prediction_LinUCB, 1)
+        regret_list.append(regret)
+        accuracy_list.append(accuracy)
+        medium_arm_list.append(medium_arm)
+    print("-------------")
+    print("LinUCB with real value reward: ")
+    print("Regret: mean {}, std {}".format(np.mean(regret_list), np.std(regret_list)))
+    print("Accuracy: mean {}, std {}".format(np.mean(accuracy_list), np.std(accuracy_list)))
+    print("Medium arm percentage: mean {}, std {}".format(np.mean(medium_arm_list), np.std(medium_arm_list)))
     
     '''
     Hyper parameters with good results

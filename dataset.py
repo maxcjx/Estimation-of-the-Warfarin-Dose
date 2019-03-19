@@ -40,6 +40,13 @@ def dosage_reward(arm_chosen, label):
     else:
         return -1
 
+def dosage_reward_difference(arm_chosen, label):
+    return -abs(arm_chosen - dosage_bucket(label))
+
+def dosage_reward_real_value(arm_chosen, label):
+    daily_dosage = label / 7.0
+    arm_dosage_list = [1.5, 5, 8.5]
+    return -abs(arm_dosage_list[arm_chosen] - daily_dosage)
 
 def load_data(file_name):
     f = open(file_name)
@@ -271,3 +278,6 @@ def calc_regret(prediction, labels, reward_function):
 def calc_accuracy(prediction, labels, bucket_function):
     correct = sum([prediction[row] == bucket_function(labels[row]) for row in range(len(prediction))])
     return float(correct) / len(prediction)
+
+def calc_bucket(prediction, bucket):
+    return len([x for x in prediction if x == bucket]) / float(len(prediction))
