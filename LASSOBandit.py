@@ -13,7 +13,7 @@ def normalize(features):
 def computeReward(x, featureList, labelList, lamda):
     featureArray = np.array(featureList) 
     labelArray = np.array(labelList)
-    clf = linear_model.Lasso(alpha = lamda, fit_intercept=False, max_iter= 1000000)
+    clf = linear_model.Lasso(alpha = lamda, fit_intercept=False, max_iter= 10000)
     clf.fit(featureArray, labelArray)
 
     #print(clf.coef_)
@@ -39,7 +39,7 @@ def LASSOBandit(features, labels, num_arms, reward_function, q, h, lamda_1, lamd
     for row in range(num_rows):
         if row >= (2**power-1)*3*q-1 and row <= (2**power-1)*3*q+3*q-1:
             arm = (row-(2**power-1)*3*q)/q+1
-            forcedArm[row] = arm
+            forcedArm[row] = int(arm)
             if row == (2**power-1)*3*q+3*q-1:
                 power +=1
 
@@ -70,6 +70,7 @@ def LASSOBandit(features, labels, num_arms, reward_function, q, h, lamda_1, lamd
                     all_maxReward = estimated_reward
                     arm_chosen = selected_arm
 
+        arm_chosen = int(arm_chosen)
         all_featureDict[arm_chosen].append(features[row])
         reward = reward_function(arm_chosen, labels[row])
         all_labelDict[arm_chosen].append(reward)
